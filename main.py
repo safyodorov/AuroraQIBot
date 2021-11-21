@@ -93,7 +93,7 @@ def start(message):
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_worker(call):
-
+    id = call.message.chat.id
     if call.data == "index":
         Q = getQ()
         bot.send_message(call.message.chat.id, "Привет, Q-индекс: "+str(Q))
@@ -118,16 +118,28 @@ def callback_worker(call):
         markup = keyboardnotes()
         bot.send_message(call.message.chat.id, "Хорошо", reply_markup=markup)
     elif call.data == "qset0":
+        db_object.execute(f"UPDATE users SET qset = 0 WHERE id = {id}")
+        db_connection.commit()
         bot.send_message(call.message.chat.id, 'Уведомления отключены')
     elif call.data == "qset5":
+        db_object.execute(f"UPDATE users SET qset = 5 WHERE id = {id}")
+        db_connection.commit()
         bot.send_message(call.message.chat.id, 'Буду присылать уведомления, когда Q-индекс будет >=5. Cияние видно на широте 62° (г. Петрозаводск).')
     elif call.data == "qset6":
+        db_object.execute(f"UPDATE users SET qset = 6 WHERE id = {id}")
+        db_connection.commit()
         bot.send_message(call.message.chat.id, 'Буду присылать уведомления, когда Q-индекс будет >=6. Сияние видно на широте 60° (г. Санкт-Петербург).')
     elif call.data == "qset7":
+        db_object.execute(f"UPDATE users SET qset = 7 WHERE id = {id}")
+        db_connection.commit()
         bot.send_message(call.message.chat.id, 'Буду присылать уведомления, когда Q-индекс будет >=7. Сияние видно на широте 56° (Иваново, Москва, Нижний Новгород, Казань, Екатеринбург, Новосибирск).')
     elif call.data == "qset8":
+        db_object.execute(f"UPDATE users SET qset = 8 WHERE id = {id}")
+        db_connection.commit()
         bot.send_message(call.message.chat.id, 'Буду присылать уведомления, когда Q-индекс будет >=8. Сияние видно на широте 52° (Самара, Курск, Липецк).')
     elif call.data == "qset9":
+        db_object.execute(f"UPDATE users SET qset = 9 WHERE id = {id}")
+        db_connection.commit()
         bot.send_message(call.message.chat.id, 'Буду присылать уведомления, когда Q-индекс будет >=9. Сияние видно на широте 50°–45° (Крым, Кавказ).')
 
 @bot.message_handler(content_types=['text'])
