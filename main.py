@@ -70,17 +70,6 @@ def keyboardnotes():
 
 # telegram bot
 bot = telebot.TeleBot(BOT_TOKEN)
-# запрашиваю из базы данных список юзеров
-db_object.execute(f"SELECT id FROM users WHERE qset = 5")
-joinedUser5 = db_object.fetchone()
-db_object.execute(f"SELECT id FROM users WHERE qset = 6")
-joinedUser6 = db_object.fetchone()
-db_object.execute(f"SELECT id FROM users WHERE qset = 7")
-joinedUser7 = db_object.fetchone()
-db_object.execute(f"SELECT id FROM users WHERE qset = 8")
-joinedUser8 = db_object.fetchone()
-db_object.execute(f"SELECT id FROM users WHERE qset = 9")
-joinedUser9 = db_object.fetchone()
 
 # собираю список юзеров в базе данных
 @bot.message_handler(commands=['start'])
@@ -163,27 +152,44 @@ def get_text_messages(message):
         bot.send_message(message.chat.id, "Напишите: ку ИЛИ график. ИЛИ нажмите на кнопку ", reply_markup=markup)
 
 # функция проверяет значения индекса Q и присылает пользователся уведомление при Q >= 6
-def AuroraPossible(joinedUser5,joinedUser6, joinedUser7, joinedUser8, joinedUser9):
+def AuroraPossible():
+    db_object = db_connection.cursor()
     Q = getQ()
-    if Q >= 1 and joinedUser5 == True:
-        for user in joinedUser5:
-            bot.send_message(user, "Внимание значение Q велико, возможно Северное сияние. Q-индекс: "+str(Q))
-    elif Q >= 2 and joinedUser6 == True:
-        for user in joinedUser6:
-            bot.send_message(user, "Внимание значение Q велико, возможно Северное сияние. Q-индекс: "+str(Q))
-    elif Q >= 7 and joinedUser7 == True:
-        for user in joinedUser7:
-            bot.send_message(user, "Внимание значение Q велико, возможно Северное сияние. Q-индекс: "+str(Q))
-    elif Q >= 8 and joinedUser8 == True:
-        for user in joinedUser8:
-            bot.send_message(user, "Внимание значение Q велико, возможно Северное сияние. Q-индекс: "+str(Q))
-    elif Q >= 9  and joinedUser9 == True:
-        for user in joinedUser9:
-            bot.send_message(user, "Внимание значение Q велико, возможно Северное сияние. Q-индекс: "+str(Q))
+    if Q >= 1:
+        # запрашиваю из базы данных список юзеров cо значением qset = 5
+        db_object.execute(f"SELECT id FROM users WHERE qset = 5")
+        joineduser5 = db_object.fetchone()
+        if joineduser5:
+            for user in joineduser5:
+                bot.send_message(user, "Внимание значение Q велико, возможно Северное сияние. Q-индекс: "+str(Q))
+    elif Q >= 2:
+        db_object.execute(f"SELECT id FROM users WHERE qset = 6")
+        joineduser6 = db_object.fetchone()
+        if joineduser6:
+            for user in joineduser6:
+                bot.send_message(user, "Внимание значение Q велико, возможно Северное сияние. Q-индекс: "+str(Q))
+    elif Q >= 7:
+        db_object.execute(f"SELECT id FROM users WHERE qset = 7")
+        joineduser7 = db_object.fetchone()
+        if joineduser7:
+            for user in joineduser7:
+                bot.send_message(user, "Внимание значение Q велико, возможно Северное сияние. Q-индекс: "+str(Q))
+    elif Q >= 8:
+        db_object.execute(f"SELECT id FROM users WHERE qset = 8")
+        joineduser8 = db_object.fetchone()
+        if joineduser8:
+            for user in joineduser8:
+                bot.send_message(user, "Внимание значение Q велико, возможно Северное сияние. Q-индекс: "+str(Q))
+    elif Q >= 9:
+        db_object.execute(f"SELECT id FROM users WHERE qset = 9")
+        joineduser9 = db_object.fetchone()
+        if joineduser9:
+            for user in joineduser9:
+                bot.send_message(user, "Внимание значение Q велико, возможно Северное сияние. Q-индекс: "+str(Q))
 
 # этот момент до конца не понимаю, но код работает!
-def notifications(joinedUser5,joinedUser6, joinedUser7, joinedUser8, joinedUser9):
-    schedule.every(2).minutes.do(AuroraPossible, joinedUser5, joinedUser6, joinedUser7, joinedUser8, joinedUser9)
+def notifications():
+    schedule.every(2).minutes.do(AuroraPossible)
 
     while True:
         schedule.run_pending()
@@ -191,7 +197,7 @@ def notifications(joinedUser5,joinedUser6, joinedUser7, joinedUser8, joinedUser9
 
 if __name__ == '__main__':
     t1 = threading.Thread(target=bot.polling)
-    t2 = threading.Thread(target=notifications, args=(joinedUser5, joinedUser6, joinedUser7, joinedUser8, joinedUser9,))
+    t2 = threading.Thread(target=notifications, args=())
     t1.start()
     t2.start()
     t1.join()
