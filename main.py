@@ -52,6 +52,18 @@ def keyboard():
     markup = telebot.types.InlineKeyboardMarkup()
     markup.add(telebot.types.InlineKeyboardButton(text='Узнать Q-индекс', callback_data="index"))
     markup.add(telebot.types.InlineKeyboardButton(text='Получить график', callback_data="picture"))
+    markup.add(telebot.types.InlineKeyboardButton(text='Настроить уведомления', callback_data="notifications"))
+    markup.add(telebot.types.InlineKeyboardButton(text='About', callback_data="about"))
+    return markup
+
+def keyboardnotes():
+    markup = telebot.types.InlineKeyboardMarkup()
+    markup.add(telebot.types.InlineKeyboardButton(text='Не получать уведомления', callback_data="qset0"))
+    markup.add(telebot.types.InlineKeyboardButton(text='Сообщать когда Q-индекс = 5', callback_data="qset5"))
+    markup.add(telebot.types.InlineKeyboardButton(text='Сообщать когда Q-индекс = 6', callback_data="qset6"))
+    markup.add(telebot.types.InlineKeyboardButton(text='Сообщать когда Q-индекс = 7', callback_data="qset7"))
+    markup.add(telebot.types.InlineKeyboardButton(text='Сообщать когда Q-индекс = 8', callback_data="qset8"))
+    markup.add(telebot.types.InlineKeyboardButton(text='Сообщать когда Q-индекс = 9', callback_data="qset9"))
     markup.add(telebot.types.InlineKeyboardButton(text='About', callback_data="about"))
     return markup
 
@@ -102,6 +114,21 @@ def callback_worker(call):
                                                'Уведомление пользователей о значениях Q-индекса равном 6 и более единицам. '
                                                'Именно при таких значениях возможно наблюдение северного сияния '
                                                'на широте 60° (Санкт-Петербург)')
+    elif call.data == "notifications":
+        markup = keyboardnotes()
+        bot.send_message(call.message.chat.id, "Хорошо", reply_markup=markup)
+    elif call.data == "qset0":
+        bot.send_message(call.message.chat.id, 'Уведомления отключены')
+    elif call.data == "qset5":
+        bot.send_message(call.message.chat.id, 'Буду присылать уведомления, когда Q-индекс будет >=5. Cияние видно на широте 62° (г. Петрозаводск).')
+    elif call.data == "qset6":
+        bot.send_message(call.message.chat.id, 'Буду присылать уведомления, когда Q-индекс будет >=6. Сияние видно на широте 60° (г. Санкт-Петербург).')
+    elif call.data == "qset7":
+        bot.send_message(call.message.chat.id, 'Буду присылать уведомления, когда Q-индекс будет >=7. Сияние видно на широте 56° (Иваново, Москва, Нижний Новгород, Казань, Екатеринбург, Новосибирск).')
+    elif call.data == "qset8":
+        bot.send_message(call.message.chat.id, 'Буду присылать уведомления, когда Q-индекс будет >=8. Сияние видно на широте 52° (Самара, Курск, Липецк).')
+    elif call.data == "qset9":
+        bot.send_message(call.message.chat.id, 'Буду присылать уведомления, когда Q-индекс будет >=9. Сияние видно на широте 50°–45° (Крым, Кавказ).')
 
 @bot.message_handler(content_types=['text'])
 
