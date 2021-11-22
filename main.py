@@ -11,7 +11,7 @@ from config import *
 db_connection = psycopg2.connect(DB_URI, sslmode="require")
 db_object = db_connection.cursor()
 
-# функция парсит картинку, сохраняет ей, обрезает и сохраняет сновая под тем же именем
+# функция парсит картинку, сохраняет её, обрезает и сохраняет снова под тем же именем
 def getImage():
     url = 'https://www2.irf.se/maggraphs/preliminary_k_index_last_24.png'
     # запись файла на диск
@@ -59,14 +59,13 @@ def keyboard():
 def keyboardnotes():
     markup = telebot.types.InlineKeyboardMarkup()
     markup.add(telebot.types.InlineKeyboardButton(text='Не получать уведомления', callback_data="qset0"))
-    markup.add(telebot.types.InlineKeyboardButton(text='Сообщать когда Q-индекс = 5', callback_data="qset5"))
-    markup.add(telebot.types.InlineKeyboardButton(text='Сообщать когда Q-индекс = 6', callback_data="qset6"))
-    markup.add(telebot.types.InlineKeyboardButton(text='Сообщать когда Q-индекс = 7', callback_data="qset7"))
-    markup.add(telebot.types.InlineKeyboardButton(text='Сообщать когда Q-индекс = 8', callback_data="qset8"))
-    markup.add(telebot.types.InlineKeyboardButton(text='Сообщать когда Q-индекс = 9', callback_data="qset9"))
+    markup.add(telebot.types.InlineKeyboardButton(text='Сообщать когда Q-индекс >= 5', callback_data="qset5"))
+    markup.add(telebot.types.InlineKeyboardButton(text='Сообщать когда Q-индекс >= 6', callback_data="qset6"))
+    markup.add(telebot.types.InlineKeyboardButton(text='Сообщать когда Q-индекс >= 7', callback_data="qset7"))
+    markup.add(telebot.types.InlineKeyboardButton(text='Сообщать когда Q-индекс >= 8', callback_data="qset8"))
+    markup.add(telebot.types.InlineKeyboardButton(text='Сообщать когда Q-индекс >= 9', callback_data="qset9"))
     markup.add(telebot.types.InlineKeyboardButton(text='About', callback_data="about"))
     return markup
-
 
 # telegram bot
 bot = telebot.TeleBot(BOT_TOKEN)
